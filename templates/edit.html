@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Produk - PT XYZ{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-amber-500 to-amber-600 px-6 py-5">
+            <div class="flex items-center space-x-3">
+                <div class="bg-white p-2 rounded-lg">
+                    <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-white">Edit Produk</h2>
+                    <p class="text-amber-100 text-sm">Update detail kendaraan #{{ product.id }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form -->
+        <form method="POST" action="{{ url_for('edit', id=product.id) }}" class="p-6 space-y-6">
+            {{ form.hidden_tag() }}
+            <!-- Merek -->
+            <div>
+                <label for="merek" class="block text-sm font-medium text-gray-700 mb-2">
+                    Merek Produk <span class="text-red-500">*</span>
+                </label>
+                <input 
+                    type="text" 
+                    id="merek" 
+                    name="merek" 
+                    value="{{ form.merek.data or product.merek }}"
+                    required
+                    placeholder="Contoh: Toyota, Honda, Daihatsu"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all {% if form.merek.errors %}border-red-500{% endif %}"
+                >
+                {% if form.merek.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.merek.errors[0] }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Jenis -->
+            <div>
+                <label for="jenis" class="block text-sm font-medium text-gray-700 mb-2">
+                    Jenis Produk <span class="text-red-500">*</span>
+                </label>
+                <select 
+                    id="jenis" 
+                    name="jenis" 
+                    required
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all {% if form.jenis.errors %}border-red-500{% endif %}"
+                >
+                    <option value="">Pilih Jenis Kendaraan</option>
+                    <option value="SUV" {% if (form.jenis.data or product.jenis) == 'SUV' %}selected{% endif %}>SUV</option>
+                    <option value="Sedan" {% if (form.jenis.data or product.jenis) == 'Sedan' %}selected{% endif %}>Sedan</option>
+                    <option value="MPV" {% if (form.jenis.data or product.jenis) == 'MPV' %}selected{% endif %}>MPV</option>
+                    <option value="Hatchback" {% if (form.jenis.data or product.jenis) == 'Hatchback' %}selected{% endif %}>Hatchback</option>
+                    <option value="Pickup" {% if (form.jenis.data or product.jenis) == 'Pickup' %}selected{% endif %}>Pickup</option>
+                    <option value="Minibus" {% if (form.jenis.data or product.jenis) == 'Minibus' %}selected{% endif %}>Minibus</option>
+                </select>
+                {% if form.jenis.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.jenis.errors[0] }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Stok and Harga (2 columns) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="stok" class="block text-sm font-medium text-gray-700 mb-2">
+                        Jumlah Stok <span class="text-red-500">*</span>
+                    </label>
+                    <input 
+                        type="number" 
+                        id="stok" 
+                        name="stok" 
+                        value="{{ form.stok.data or product.stok }}"
+                        min="0"
+                        required
+                        placeholder="Contoh: 5"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all {% if form.stok.errors %}border-red-500{% endif %}"
+                    >
+                    {% if form.stok.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.stok.errors[0] }}</p>
+                    {% endif %}
+                </div>
+                <div>
+                    <label for="harga" class="block text-sm font-medium text-gray-700 mb-2">
+                        Harga (Rp) <span class="text-red-500">*</span>
+                    </label>
+                    <input 
+                        type="number" 
+                        id="harga" 
+                        name="harga" 
+                        value="{{ form.harga.data or product.harga }}"
+                        min="0"
+                        required
+                        placeholder="Contoh: 150000000"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all {% if form.harga.errors %}border-red-500{% endif %}"
+                    >
+                    {% if form.harga.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.harga.errors[0] }}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Keterangan -->
+            <div>
+                <label for="keterangan" class="block text-sm font-medium text-gray-700 mb-2">
+                    Keterangan
+                </label>
+                <textarea 
+                    id="keterangan" 
+                    name="keterangan" 
+                    rows="4"
+                    placeholder="Deskripsikan kondisi kendaraan, tahun, warna, dll..."
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all resize-none {% if form.keterangan.errors %}border-red-500{% endif %}"
+                >{{ form.keterangan.data or product.keterangan or '' }}</textarea>
+                {% if form.keterangan.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.keterangan.errors[0] }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Info -->
+            <div class="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                <div class="flex items-start space-x-3">
+                    <svg class="w-5 h-5 text-amber-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <div class="text-sm text-amber-800">
+                        <p class="font-medium">Informasi Produk</p>
+                        <p class="mt-1">Dibuat pada: {{ product.created_at.strftime('%d %B %Y %H:%M') if product.created_at else '-' }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex items-center justify-end space-x-4 pt-4 border-t border-gray-200">
+                <a href="{{ url_for('index') }}" class="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors">
+                    Batal
+                </a>
+                <button type="submit" class="px-6 py-3 bg-amber-500 text-white rounded-lg font-medium hover:bg-amber-600 transition-colors flex items-center space-x-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span>Update Produk</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
